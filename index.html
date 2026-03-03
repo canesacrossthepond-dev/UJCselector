@@ -128,8 +128,13 @@
   .res-actions { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:40px; }
   .btn-dl { background:var(--gold); color:#000; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:14px 36px; border-radius:50px; border:none; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(255,215,0,0.3); }
   .btn-dl:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(255,215,0,0.5); }
-  .btn-share { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:14px 36px; border-radius:50px; border:none; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(37,211,102,0.3); }
-  .btn-share:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(37,211,102,0.5); }
+  .btn-share { display:none; } /* kept for safety, not used */
+  .tag-prompt { text-align:center; margin-bottom:36px; padding:20px 24px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; max-width:460px; margin-left:auto; margin-right:auto; margin-bottom:36px; }
+  .tag-prompt-text { font-family:'Barlow',sans-serif; font-size:15px; color:rgba(255,255,255,0.75); margin-bottom:12px; line-height:1.5; }
+  .tag-handles { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .tag-handle { font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; letter-spacing:1px; color:var(--gold); text-decoration:none; transition:opacity 0.2s; }
+  .tag-handle:hover { opacity:0.75; }
+  .tag-sep { color:rgba(255,255,255,0.3); font-size:16px; }
   .btn-retake { background:transparent; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:14px 36px; border-radius:50px; border:2px solid rgba(255,255,255,0.3); cursor:pointer; transition:all 0.3s; }
   .btn-retake:hover { border-color:#fff; background:rgba(255,255,255,0.08); }
   .score-box { background:rgba(0,0,0,0.3); border-radius:16px; padding:24px 30px; max-width:380px; margin:0 auto; border:1px solid rgba(255,255,255,0.1); }
@@ -317,8 +322,15 @@
       <div class="res-card"><canvas id="res-canvas" width="1080" height="1080"></canvas></div>
       <div class="res-actions">
         <button class="btn-dl" onclick="dlCard()">⬇ DOWNLOAD CARD</button>
-        <button class="btn-share" id="btn-share" onclick="shareCard()" style="display:none">📲 SHARE</button>
         <button class="btn-retake" onclick="retake()">↺ RETAKE QUIZ</button>
+      </div>
+      <div class="tag-prompt">
+        <div class="tag-prompt-text">📸 Download your card and tag us — we'd love to see which side you're on!</div>
+        <div class="tag-handles">
+          <a class="tag-handle" href="https://instagram.com/canesacrossthepond" target="_blank" rel="noopener">@canesacrossthepond</a>
+          <span class="tag-sep">•</span>
+          <a class="tag-handle" href="https://x.com/canesxthepond" target="_blank" rel="noopener">@canesxthepond</a>
+        </div>
       </div>
       <div class="score-box">
         <h3>Your Score Breakdown</h3>
@@ -594,11 +606,6 @@ function showResult() {
 
   drawCard(D, personality, kpct, apct);
 
-  // Show share button only if Web Share API is supported
-  const shareBtn = document.getElementById('btn-share');
-  shareBtn.dataset.hashtag = D.hashtag;
-  if (navigator.share) shareBtn.style.display = 'inline-block';
-
   hide('s-quiz'); show('s-result'); window.scrollTo(0,0);
 }
 
@@ -788,43 +795,6 @@ function dlCard() {
   a.download = 'UJC-MyTeam.png';
   a.href = cv.toDataURL('image/png');
   a.click();
-}
-
-async function shareCard() {
-  const cv = document.getElementById('res-canvas');
-  const btn = document.getElementById('btn-share');
-
-  // Convert canvas to a Blob, then share as a file
-  cv.toBlob(async (blob) => {
-    const file = new File([blob], 'UJC-MyTeam.png', { type: 'image/png' });
-
-    // Check if files can be shared (mobile mostly), fall back to URL-only share
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: 'Union Jack Classic — Which Side Are You?',
-          text: `I just took the Union Jack Classic quiz — find out which team YOU should cheer at Wembley! 🏈🇬🇧 ${btn.dataset.hashtag}  #UnionJackClassic`,
-        });
-      } catch (err) {
-        if (err.name !== 'AbortError') fallbackShare(btn.dataset.hashtag);
-      }
-    } else {
-      // Fallback: share URL + text only (no image file)
-      fallbackShare(btn.dataset.hashtag);
-    }
-  }, 'image/png');
-}
-
-function fallbackShare(hashtag) {
-  // URL-only share (desktop browsers / older mobile)
-  if (navigator.share) {
-    navigator.share({
-      title: 'Union Jack Classic — Which Side Are You?',
-      text: `I just took the Union Jack Classic quiz — find out which team YOU should cheer at Wembley! 🏈🇬🇧 ${hashtag}  #UnionJackClassic`,
-      url: window.location.href,
-    }).catch(() => {});
-  }
 }
 
 function show(id){ document.getElementById(id).style.display='block'; }
