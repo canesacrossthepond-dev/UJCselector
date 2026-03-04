@@ -46,7 +46,7 @@
   #s-result { display:none; }
 
   /* HERO */
-  .hero { background:linear-gradient(180deg,#0A0A1A,#0d0d2b); padding:60px 20px; text-align:center; }
+  .hero { background:linear-gradient(180deg,#0A0A1A,#0d0d2b); padding:60px 20px 10px; text-align:center; }
   .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(50px,12vw,100px); line-height:0.9; margin-bottom:8px; background:linear-gradient(135deg,#fff,#c0c0c0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
   .hero-sub { font-family:'Barlow Condensed',sans-serif; font-size:clamp(16px,3vw,20px); color:rgba(255,255,255,0.65); letter-spacing:2px; text-transform:uppercase; margin:0 auto 50px; max-width:600px; }
 
@@ -60,21 +60,8 @@
   .tc-loc { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:rgba(255,255,255,0.5); letter-spacing:2px; text-transform:uppercase; }
   .vs { font-family:'Bebas Neue',sans-serif; font-size:48px; color:rgba(255,255,255,0.3); text-align:center; }
 
-  /* VOTE */
-  .vote { max-width:500px; margin:0 auto 50px; text-align:center; }
-  .vote-hdr { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:16px; }
-  .vote-ttl { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); }
-  .vote-st { font-size:14px; color:rgba(255,255,255,0.5); margin-bottom:20px; font-style:italic; }
-  .vb-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-  .vb-lbl { font-family:'Bebas Neue',sans-serif; font-size:18px; width:40px; text-align:right; color:rgba(255,255,255,0.7); }
-  .vb-track { flex:1; background:rgba(255,255,255,0.1); border-radius:4px; height:8px; overflow:hidden; }
-  .vb-fill { height:100%; border-radius:4px; transition:width 0.6s ease; }
-  .vb-fill.ku { background:linear-gradient(90deg,#0051a5,#003880); }
-  .vb-fill.asu { background:linear-gradient(90deg,#8C1D40,#5C0010); }
-  .vb-pct { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:15px; width:35px; color:rgba(255,255,255,0.5); }
-
   /* CTA */
-  .cta { text-align:center; padding:0 20px 80px; }
+  .cta { text-align:center; padding:50px 20px; }
   .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--uk-red),#8B0000); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:18px 48px; border-radius:50px; border:none; cursor:pointer; transition:all 0.3s; box-shadow:0 6px 30px rgba(207,20,43,0.4); }
   .cta-btn:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 40px rgba(207,20,43,0.6); }
   .cta-note { font-size:13px; color:rgba(255,255,255,0.4); margin-top:14px; letter-spacing:1px; }
@@ -148,7 +135,7 @@
   .sc-pct { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:15px; width:36px; }
 
   /* HOW IT WORKS */
-  .hiw { background:linear-gradient(180deg,#0d0d2b,#0a0a1a); padding:60px 20px 70px; text-align:center; }
+  .hiw { background:linear-gradient(180deg,#0d0d2b,#0a0a1a); padding:10px 20px 50px; text-align:center; }
   .hiw-title { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:40px; }
   .hiw-steps { display:flex; align-items:flex-start; justify-content:center; gap:0; max-width:860px; margin:0 auto; flex-wrap:wrap; }
   .hiw-step { flex:1; min-width:200px; max-width:240px; padding:0 16px; }
@@ -249,25 +236,12 @@
 
   <div class="flag-div"><div class="fr"></div><div class="fw"></div><div class="fb"></div><div class="fb"></div><div class="fw"></div><div class="fr"></div></div>
 
-  <section class="hero" style="padding-top:40px;padding-bottom:0">
-    <div class="vote">
-      <div class="vote-hdr"><span style="font-size:22px">🏆</span><span class="vote-ttl">Live Fan Vote</span></div>
-      <div class="vote-st" id="vote-st">No votes yet</div>
-      <div>
-        <div class="vb-row"><div class="vb-lbl">KU</div><div class="vb-track"><div class="vb-fill ku" id="vb-ku" style="width:0%"></div></div><div class="vb-pct" id="vp-ku">—</div></div>
-        <div class="vb-row"><div class="vb-lbl">ASU</div><div class="vb-track"><div class="vb-fill asu" id="vb-asu" style="width:0%"></div></div><div class="vb-pct" id="vp-asu">—</div></div>
-      </div>
-    </div>
-  </section>
-
   <div class="cta">
     <button class="cta-btn" onclick="startQuiz()">PICK YOUR TEAM →</button>
     <div class="cta-note">12 questions &nbsp;•&nbsp; ~2 minutes &nbsp;•&nbsp; downloadable result card</div>
   </div>
 
   <div class="flag-div"><div class="fr"></div><div class="fw"></div><div class="fb"></div><div class="fb"></div><div class="fw"></div><div class="fr"></div></div>
-
-  <!-- ABOUT CANES ACROSS THE POND -->
   <section class="about">
     <div class="about-inner">
       <div class="about-badge">🇬🇧 🏈 🇺🇸</div>
@@ -559,9 +533,6 @@ function showResult() {
   const apct = 100-kpct;
   const winner = ku >= asu ? 'ku' : 'asu';
 
-  // Write vote to Firebase (only once per browser)
-  submitVote(winner);
-
   const screen = document.getElementById('s-result');
   screen.className = 'res-'+winner;
 
@@ -804,58 +775,6 @@ function dlCard() {
 
 function show(id){ document.getElementById(id).style.display='block'; }
 function hide(id){ document.getElementById(id).style.display='none'; }
-</script>
-
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getDatabase, ref, runTransaction, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBJRvo-LMK4cP87_uCy8DIO31uJs54SLAY",
-    authDomain: "union-jack-classic.firebaseapp.com",
-    databaseURL: "https://union-jack-classic-default-rtdb.firebaseio.com",
-    projectId: "union-jack-classic",
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
-
-  /* ── Update vote bars from live Firebase totals ── */
-  function updateVoteBars(kuCount, asuCount) {
-    const total = kuCount + asuCount;
-    if (total === 0) return;
-    const kpct = Math.round((kuCount / total) * 100);
-    const apct = 100 - kpct;
-    document.getElementById('vb-ku').style.width  = kpct + '%';
-    document.getElementById('vb-asu').style.width = apct + '%';
-    document.getElementById('vp-ku').textContent  = kpct + '%';
-    document.getElementById('vp-asu').textContent = apct + '%';
-    document.getElementById('vote-st').textContent =
-      `${total.toLocaleString()} vote${total !== 1 ? 's' : ''} cast`;
-  }
-
-  /* ── Listen for real-time vote updates ── */
-  const votesRef = ref(db, 'votes');
-  onValue(votesRef, (snapshot) => {
-    const data = snapshot.val() || {};
-    updateVoteBars(data.ku || 0, data.asu || 0);
-  });
-
-  /* ── Submit a vote (once per browser via localStorage) ── */
-  window.submitVote = function(team) {
-    const key = 'ujc_voted';
-    if (localStorage.getItem(key)) {
-      // Already voted — just show updated bars, no new write
-      return;
-    }
-    const teamRef = ref(db, 'votes/' + team);
-    runTransaction(teamRef, (current) => (current || 0) + 1)
-      .then(() => {
-        localStorage.setItem(key, team);
-      })
-      .catch((err) => console.warn('Vote error:', err));
-  };
 </script>
 </body>
 </html>
