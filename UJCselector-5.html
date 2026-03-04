@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Union Jack Classic — Which Team Are You?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFD700;
+    --navy: #001F5B;
+    --uk-red: #CF142B;
+    --uk-blue: #00247D;
+    --ku-blue: #0051a5;
+    --asu-maroon: #8C1D40;
+    --asu-gold: #FFC627;
+    --dark-bg: #0A0A1A;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Barlow',sans-serif; background:var(--dark-bg); color:#fff; min-height:100vh; overflow-x:hidden; }
+
+  /* TICKER */
+  .ticker-bar { background:linear-gradient(90deg,var(--uk-red),#8B0000,var(--uk-red)); padding:8px 0; overflow:hidden; }
+  .ticker-track { display:flex; gap:60px; animation:ticker 22s linear infinite; white-space:nowrap; }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .ticker-item { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#fff; display:flex; align-items:center; gap:12px; }
+  .ts { color:var(--gold); font-size:18px; }
+
+  /* COUNTDOWN */
+  .cd-header { background:linear-gradient(135deg,var(--navy),#001244 40%,#1a0000); padding:40px 20px 30px; text-align:center; border-bottom:3px solid var(--gold); }
+  .cd-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:14px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; margin-bottom:20px; }
+  .cd-grid { display:flex; justify-content:center; align-items:center; gap:4px; margin-bottom:20px; flex-wrap:wrap; }
+  .cd-unit { text-align:center; min-width:80px; }
+  .cd-num { font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; text-shadow:0 0 30px rgba(255,215,0,0.4); }
+  .cd-lbl { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-top:2px; }
+  .cd-sep { font-family:'Bebas Neue',sans-serif; font-size:60px; color:rgba(255,215,0,0.5); margin:0 4px; padding-bottom:16px; }
+  .cd-sub { font-family:'Barlow Condensed',sans-serif; font-size:15px; letter-spacing:2px; color:rgba(255,255,255,0.6); text-transform:uppercase; }
+
+  /* FLAG DIVIDER */
+  .flag-div { display:flex; height:6px; }
+  .fr{background:#CF142B;flex:1} .fw{background:#fff;flex:1} .fb{background:#00247D;flex:1}
+
+  /* SCREENS */
+  #s-land { display:block; }
+  #s-quiz { display:none; }
+  #s-result { display:none; }
+
+  /* HERO */
+  .hero { background:linear-gradient(180deg,#0A0A1A,#0d0d2b); padding:60px 20px 10px; text-align:center; }
+  .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(50px,12vw,100px); line-height:0.9; margin-bottom:8px; background:linear-gradient(135deg,#fff,#c0c0c0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero-sub { font-family:'Barlow Condensed',sans-serif; font-size:clamp(16px,3vw,20px); color:rgba(255,255,255,0.65); letter-spacing:2px; text-transform:uppercase; margin:0 auto 50px; max-width:600px; }
+
+  /* MATCHUP */
+  .matchup { max-width:700px; margin:0 auto 50px; display:grid; grid-template-columns:1fr auto 1fr; gap:20px; align-items:center; }
+  .tc { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:30px 20px; text-align:center; transition:all 0.3s; }
+  .tc.jh:hover { border-color:var(--ku-blue); background:rgba(0,81,165,0.12); transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,81,165,0.25); }
+  .tc.sd:hover { border-color:var(--asu-maroon); background:rgba(140,29,64,0.12); transform:translateY(-4px); box-shadow:0 12px 40px rgba(140,29,64,0.25); }
+  .tc-emoji { font-size:56px; display:block; margin-bottom:12px; }
+  .tc-name { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:1px; margin-bottom:4px; }
+  .tc-loc { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:rgba(255,255,255,0.5); letter-spacing:2px; text-transform:uppercase; }
+  .vs { font-family:'Bebas Neue',sans-serif; font-size:48px; color:rgba(255,255,255,0.3); text-align:center; }
+
+  /* CTA */
+  .cta { text-align:center; padding:50px 20px; }
+  .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--uk-red),#8B0000); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:18px 48px; border-radius:50px; border:none; cursor:pointer; transition:all 0.3s; box-shadow:0 6px 30px rgba(207,20,43,0.4); }
+  .cta-btn:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 40px rgba(207,20,43,0.6); }
+  .cta-note { font-size:13px; color:rgba(255,255,255,0.4); margin-top:14px; letter-spacing:1px; }
+
+  /* FOOTER */
+  .footer { background:linear-gradient(90deg,var(--uk-blue),#001a5e,var(--uk-blue)); padding:20px; text-align:center; border-top:3px solid var(--uk-red); }
+  .footer-txt { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.85); }
+
+  /* ══ QUIZ SCREEN ══ */
+  #s-quiz { min-height:100vh; background:linear-gradient(135deg,#0A0A1A,#0d0d2b); padding:40px 20px 80px; }
+  .qwrap { max-width:680px; margin:0 auto; }
+  .q-prog-wrap { width:100%; background:rgba(255,255,255,0.1); border-radius:4px; height:6px; margin-bottom:10px; overflow:hidden; }
+  .q-prog-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--uk-red),var(--gold)); transition:width 0.4s ease; }
+  .q-prog-lbl { font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:2px; color:rgba(255,255,255,0.5); text-align:right; margin-bottom:32px; }
+  .q-block { animation:fadeUp 0.35s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .q-num { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .q-text { font-family:'Bebas Neue',sans-serif; font-size:clamp(26px,5vw,42px); line-height:1.1; margin-bottom:32px; }
+  .q-opts { display:grid; gap:14px; }
+  .q-opt { background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.12); border-radius:12px; padding:18px 22px; cursor:pointer; font-family:'Barlow',sans-serif; font-size:16px; color:#fff; transition:all 0.2s; text-align:left; display:flex; align-items:center; gap:14px; width:100%; }
+  .q-opt:hover { border-color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.1); transform:translateX(4px); }
+  .q-opt.sel-ku  { border-color:var(--ku-blue);   background:rgba(0,81,165,0.2); }
+  .q-opt.sel-asu { border-color:var(--asu-maroon); background:rgba(140,29,64,0.2); }
+  .opt-ltr { font-family:'Bebas Neue',sans-serif; font-size:18px; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:rgba(255,255,255,0.6); transition:all 0.2s; }
+  .q-opt.sel-ku  .opt-ltr { background:var(--ku-blue);   color:#fff; }
+  .q-opt.sel-asu .opt-ltr { background:var(--asu-maroon); color:#fff; }
+  .q-nav { display:flex; justify-content:space-between; align-items:center; margin-top:36px; }
+  .btn-back { background:transparent; border:2px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); font-family:'Barlow Condensed',sans-serif; font-size:16px; letter-spacing:2px; text-transform:uppercase; padding:12px 28px; border-radius:50px; cursor:pointer; transition:all 0.2s; }
+  .btn-back:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+  .btn-back:disabled { opacity:0.2; cursor:not-allowed; }
+  .btn-next { background:linear-gradient(135deg,var(--uk-red),#8B0000); border:none; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:14px 40px; border-radius:50px; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(207,20,43,0.35); opacity:0.35; pointer-events:none; }
+  .btn-next.active { opacity:1; pointer-events:auto; }
+  .btn-next.active:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(207,20,43,0.6); }
+
+  /* ══ RESULT SCREEN ══ */
+  #s-result { min-height:100vh; padding:60px 20px 80px; text-align:center; }
+  #s-result.res-ku  { background:linear-gradient(135deg,#001a3a,#002a5c 50%,#001244); }
+  #s-result.res-asu { background:linear-gradient(135deg,#1a0010,#3a0020 50%,#1a0010); }
+  .res-wrap { max-width:620px; margin:0 auto; }
+  .res-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:14px; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:16px; }
+  .res-emoji { font-size:80px; display:block; margin-bottom:8px; animation:popIn 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes popIn { 0%{transform:scale(0.4);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+  .res-headline { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,10vw,72px); line-height:1; margin-bottom:12px; }
+  .res-school { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:6px; }
+  .res-school.ku  { color:#4da3ff; }
+  .res-school.asu { color:var(--asu-gold); }
+  .res-tagline { font-size:16px; color:rgba(255,255,255,0.75); margin-bottom:16px; max-width:500px; margin-left:auto; margin-right:auto; line-height:1.65; }
+  .res-personality { font-size:15px; color:rgba(255,255,255,0.55); font-style:italic; margin-bottom:36px; max-width:480px; margin-left:auto; margin-right:auto; }
+  .res-card { margin-bottom:36px; }
+  #res-canvas { border-radius:16px; max-width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.5); display:block; margin:0 auto; }
+  .res-actions { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:40px; }
+  .btn-dl { background:var(--gold); color:#000; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:14px 36px; border-radius:50px; border:none; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(255,215,0,0.3); }
+  .btn-dl:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(255,215,0,0.5); }
+  .btn-share { display:none; } /* kept for safety, not used */
+  .tag-prompt { text-align:center; margin-bottom:36px; padding:20px 24px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; max-width:460px; margin-left:auto; margin-right:auto; margin-bottom:36px; }
+  .tag-prompt-text { font-family:'Barlow',sans-serif; font-size:15px; color:rgba(255,255,255,0.75); margin-bottom:12px; line-height:1.5; }
+  .tag-handles { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .tag-handle { font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; letter-spacing:1px; color:var(--gold); text-decoration:none; transition:opacity 0.2s; }
+  .tag-handle:hover { opacity:0.75; }
+  .tag-sep { color:rgba(255,255,255,0.3); font-size:16px; }
+  .btn-retake { background:transparent; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:14px 36px; border-radius:50px; border:2px solid rgba(255,255,255,0.3); cursor:pointer; transition:all 0.3s; }
+  .btn-retake:hover { border-color:#fff; background:rgba(255,255,255,0.08); }
+  .score-box { background:rgba(0,0,0,0.3); border-radius:16px; padding:24px 30px; max-width:380px; margin:0 auto; border:1px solid rgba(255,255,255,0.1); }
+  .score-box h3 { font-family:'Barlow Condensed',sans-serif; font-size:14px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:16px; }
+  .sc-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .sc-lbl { font-family:'Bebas Neue',sans-serif; font-size:18px; width:40px; }
+  .sc-track { flex:1; background:rgba(255,255,255,0.08); border-radius:4px; height:8px; overflow:hidden; }
+  .sc-fill { height:100%; border-radius:4px; transition:width 1s ease 0.3s; }
+  .sc-fill.ku  { background:linear-gradient(90deg,var(--ku-blue),#0070e0); }
+  .sc-fill.asu { background:linear-gradient(90deg,var(--asu-maroon),#c04060); }
+  .sc-pct { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:15px; width:36px; }
+
+  /* HOW IT WORKS */
+  .hiw { background:linear-gradient(180deg,#0d0d2b,#0a0a1a); padding:10px 20px 50px; text-align:center; }
+  .hiw-title { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:40px; }
+  .hiw-steps { display:flex; align-items:flex-start; justify-content:center; gap:0; max-width:860px; margin:0 auto; flex-wrap:wrap; }
+  .hiw-step { flex:1; min-width:200px; max-width:240px; padding:0 16px; }
+  .hiw-icon { font-size:48px; margin-bottom:16px; display:block; }
+  .hiw-step-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:1px; color:#fff; margin-bottom:10px; }
+  .hiw-step-desc { font-family:'Barlow',sans-serif; font-size:14px; color:rgba(255,255,255,0.55); line-height:1.6; }
+  .hiw-arrow { font-family:'Bebas Neue',sans-serif; font-size:36px; color:rgba(255,255,255,0.2); padding:0 8px; margin-top:24px; flex-shrink:0; align-self:flex-start; padding-top:14px; }
+
+  /* ABOUT */
+  .about { background:#080814; padding:70px 20px; text-align:center; }
+  .about-inner { max-width:680px; margin:0 auto; }
+  .about-badge { font-size:32px; margin-bottom:20px; letter-spacing:8px; }
+  .about-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,5vw,42px); letter-spacing:2px; color:#fff; margin-bottom:24px; }
+  .about-text { font-family:'Barlow',sans-serif; font-size:16px; color:rgba(255,255,255,0.65); line-height:1.75; margin-bottom:16px; }
+  .about-socials { margin-top:32px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .about-social-btn { display:inline-block; background:transparent; border:2px solid rgba(255,255,255,0.25); color:rgba(255,255,255,0.75); font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:12px 28px; border-radius:50px; text-decoration:none; transition:all 0.3s; }
+  .about-social-btn.instagram:hover { border-color:#E1306C; color:#E1306C; }
+  .about-social-btn.x:hover { border-color:#fff; color:#fff; }
+  .about-closing { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; color:rgba(255,255,255,0.9); margin-top:28px; letter-spacing:1px; }
+
+  @media(max-width:600px){
+    .matchup{grid-template-columns:1fr;gap:10px}
+    .vs{font-size:32px}
+    .cd-num{font-size:52px}
+    .cd-unit{min-width:60px}
+    .hiw-arrow { display:none; }
+    .hiw-steps { gap:32px; }
+    .hiw-step { min-width:160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LANDING ═══════════════ -->
+<div id="s-land">
+  <div class="ticker-bar">
+    <div class="ticker-track">
+      <span class="ticker-item">🏈🇬🇧 WEMBLEY 2026 <span class="ts">★</span></span>
+      <span class="ticker-item">UNION JACK CLASSIC <span class="ts">★</span></span>
+      <span class="ticker-item">KANSAS JAYHAWKS VS ASU SUN DEVILS <span class="ts">★</span></span>
+      <span class="ticker-item">🏟️ WEMBLEY STADIUM, LONDON <span class="ts">★</span></span>
+      <span class="ticker-item">🏈🇬🇧 WEMBLEY 2026 <span class="ts">★</span></span>
+      <span class="ticker-item">UNION JACK CLASSIC <span class="ts">★</span></span>
+      <span class="ticker-item">KANSAS JAYHAWKS VS ASU SUN DEVILS <span class="ts">★</span></span>
+      <span class="ticker-item">🏟️ WEMBLEY STADIUM, LONDON <span class="ts">★</span></span>
+    </div>
+  </div>
+
+  <div class="cd-header">
+    <div class="cd-eyebrow">🏈🇬🇧 WEMBLEY 2026</div>
+    <div class="cd-grid">
+      <div class="cd-unit"><div class="cd-num" id="cd-d">000</div><div class="cd-lbl">Days</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-h">00</div><div class="cd-lbl">Hrs</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl">Min</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl">Sec</div></div>
+    </div>
+    <div class="cd-sub">🏈🇬🇧 Union Jack Classic • Wembley Stadium • 2026</div>
+  </div>
+
+  <div class="flag-div"><div class="fr"></div><div class="fw"></div><div class="fb"></div><div class="fb"></div><div class="fw"></div><div class="fr"></div></div>
+
+  <section class="hero">
+    <h1 class="hero-title">WHICH SIDE<br>ARE YOU?</h1>
+    <p class="hero-sub">Answer 12 questions. Find your team. Download your result card.</p>
+    <div class="matchup">
+      <div class="tc jh"><span class="tc-emoji">🦅</span><div class="tc-name">Kansas Jayhawks</div><div class="tc-loc">Lawrence, KS</div></div>
+      <div class="vs">VS</div>
+      <div class="tc sd"><span class="tc-emoji">😈</span><div class="tc-name">ASU Sun Devils</div><div class="tc-loc">Tempe, AZ</div></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="hiw">
+    <div class="hiw-title">HOW IT WORKS</div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-icon">🏈</div>
+        <div class="hiw-step-title">Answer 12 Questions</div>
+        <div class="hiw-step-desc">Quick, fun questions about your personality, style, and what you're looking for from a college football team</div>
+      </div>
+      <div class="hiw-arrow">→</div>
+      <div class="hiw-step">
+        <div class="hiw-icon">🎯</div>
+        <div class="hiw-step-title">Discover Your Team</div>
+        <div class="hiw-step-desc">Find out whether you're a Kansas Jayhawk or an ASU Sun Devil — and why you're the perfect match</div>
+      </div>
+      <div class="hiw-arrow">→</div>
+      <div class="hiw-step">
+        <div class="hiw-icon">📲</div>
+        <div class="hiw-step-title">Share Your Result</div>
+        <div class="hiw-step-desc">Download your personalised result card and share it with friends — then see them at Wembley in September</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="flag-div"><div class="fr"></div><div class="fw"></div><div class="fb"></div><div class="fb"></div><div class="fw"></div><div class="fr"></div></div>
+
+  <div class="cta">
+    <button class="cta-btn" onclick="startQuiz()">PICK YOUR TEAM →</button>
+    <div class="cta-note">12 questions &nbsp;•&nbsp; ~2 minutes &nbsp;•&nbsp; downloadable result card</div>
+  </div>
+
+  <div class="flag-div"><div class="fr"></div><div class="fw"></div><div class="fb"></div><div class="fb"></div><div class="fw"></div><div class="fr"></div></div>
+  <section class="about">
+    <div class="about-inner">
+      <div class="about-badge">🇬🇧 🏈 🇺🇸</div>
+      <h2 class="about-title">ABOUT CANES ACROSS THE POND</h2>
+      <p class="about-text">Welcome to Canes Across the Pond.</p>
+      <p class="about-text">I'm Jimmy — a Miami Hurricanes fan watching from the UK, usually with a cup of Yorkshire Tea in hand and a late kick-off ahead.</p>
+      <p class="about-text">The Union Jack Classic is about more than one team. It's about growing college football on this side of the Atlantic and giving UK fans a proper game-day experience.</p>
+      <p class="about-text">Take the quiz, find your team for the day, and pick a side.</p>
+      <p class="about-text">And if you enjoy the content, come and join the community:</p>
+      <div class="about-socials">
+        <a class="about-social-btn instagram" href="https://instagram.com/canesacrossthepond" target="_blank" rel="noopener">📸 @canesacrossthepond</a>
+        <a class="about-social-btn x" href="https://x.com/canesxthepond" target="_blank" rel="noopener">✕ @canesxthepond</a>
+      </div>
+      <p class="about-closing">Bringing The U to the UK. 🙌🏾🇬🇧</p>
+    </div>
+  </section>
+
+  <div class="footer"><div class="footer-txt">CANES ACROSS THE POND — BRINGING THE U TO THE UK</div></div>
+</div>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<div id="s-quiz">
+  <div class="ticker-bar" style="position:sticky;top:0;z-index:99">
+    <div class="ticker-track">
+      <span class="ticker-item">🏈🇬🇧 UNION JACK CLASSIC <span class="ts">★</span></span>
+      <span class="ticker-item">WHICH SIDE ARE YOU? <span class="ts">★</span></span>
+      <span class="ticker-item">KANSAS JAYHAWKS VS ASU SUN DEVILS <span class="ts">★</span></span>
+      <span class="ticker-item">WEMBLEY 2026 <span class="ts">★</span></span>
+      <span class="ticker-item">🏈🇬🇧 UNION JACK CLASSIC <span class="ts">★</span></span>
+      <span class="ticker-item">WHICH SIDE ARE YOU? <span class="ts">★</span></span>
+      <span class="ticker-item">KANSAS JAYHAWKS VS ASU SUN DEVILS <span class="ts">★</span></span>
+      <span class="ticker-item">WEMBLEY 2026 <span class="ts">★</span></span>
+    </div>
+  </div>
+  <div class="qwrap">
+    <div class="q-prog-wrap"><div class="q-prog-fill" id="q-prog" style="width:0%"></div></div>
+    <div class="q-prog-lbl" id="q-lbl">Question 1 of 12</div>
+    <div class="q-block" id="q-block"></div>
+    <div class="q-nav">
+      <button class="btn-back" id="btn-back" onclick="prevQ()" disabled>← BACK</button>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">NEXT →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ RESULT ═══════════════ -->
+<div id="s-result">
+  <div class="ticker-bar"><div class="ticker-track" id="res-ticker"></div></div>
+  <div style="padding:40px 20px 0;text-align:center">
+    <div class="res-wrap">
+      <div class="res-eyebrow">YOUR RESULT</div>
+      <span class="res-emoji" id="res-emoji"></span>
+      <h2 class="res-headline" id="res-hl"></h2>
+      <div class="res-school" id="res-school"></div>
+      <p class="res-tagline" id="res-tag"></p>
+      <p class="res-personality" id="res-personality"></p>
+      <div class="res-card"><canvas id="res-canvas" width="1080" height="1080"></canvas></div>
+      <div class="res-actions">
+        <button class="btn-dl" onclick="dlCard()">⬇ DOWNLOAD CARD</button>
+        <button class="btn-retake" onclick="retake()">↺ RETAKE QUIZ</button>
+      </div>
+      <div class="tag-prompt">
+        <div class="tag-prompt-text">📸 Download your card and tag us — we'd love to see which side you're on!</div>
+        <div class="tag-handles">
+          <a class="tag-handle" href="https://instagram.com/canesacrossthepond" target="_blank" rel="noopener">@canesacrossthepond</a>
+          <span class="tag-sep">•</span>
+          <a class="tag-handle" href="https://x.com/canesxthepond" target="_blank" rel="noopener">@canesxthepond</a>
+        </div>
+      </div>
+      <div class="score-box">
+        <h3>Your Score Breakdown</h3>
+        <div class="sc-row"><div class="sc-lbl">KU</div><div class="sc-track"><div class="sc-fill ku" id="sc-ku" style="width:0%"></div></div><div class="sc-pct" id="sp-ku">0%</div></div>
+        <div class="sc-row"><div class="sc-lbl">ASU</div><div class="sc-track"><div class="sc-fill asu" id="sc-asu" style="width:0%"></div></div><div class="sc-pct" id="sp-asu">0%</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer" style="margin-top:60px"><div class="footer-txt">CANES ACROSS THE POND — BRINGING THE U TO THE UK</div></div>
+</div>
+
+<script>
+/* ── COUNTDOWN ── */
+function tick() {
+  const diff = new Date('2026-09-19T17:00:00Z') - new Date();
+  if (diff <= 0) return;
+  document.getElementById('cd-d').textContent = String(Math.floor(diff/86400000)).padStart(3,'0');
+  document.getElementById('cd-h').textContent = String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(Math.floor(diff%60000/1000)).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+
+/* ══════════════════════════════════════
+   QUESTIONS — written for a UK audience
+   discovering American college football
+══════════════════════════════════════ */
+const Qs = [
+  {
+    q: "YOU'VE JUST LANDED AT WEMBLEY FOR YOUR FIRST AMERICAN FOOTBALL GAME. WHAT'S YOUR VIBE?",
+    opts: [
+      { t: "Quietly soaking it all in — this is history in the making 📖", v:'ku' },
+      { t: "Absolutely buzzing — louder than a Boxing Day match 🎉", v:'asu' },
+      { t: "Already googling the rules on the Tube ride over 📱", v:'ku' },
+      { t: "Arrived in full kit, face paint and all — pure commitment 😈", v:'asu' },
+    ]
+  },
+  {
+    q: "HOW WOULD YOUR MATES DESCRIBE YOU ON A NIGHT OUT?",
+    opts: [
+      { t: "The reliable one — always gets everyone home safe 🤝", v:'ku' },
+      { t: "The one who starts the karaoke and doesn't apologise 🎤", v:'asu' },
+      { t: "First to suggest a proper pub — none of your trendy bars 🍺", v:'ku' },
+      { t: "Last to leave, first to suggest a club after 🌃", v:'asu' },
+    ]
+  },
+  {
+    q: "PICK THE SPORT THAT BEST DESCRIBES YOUR PERSONALITY:",
+    opts: [
+      { t: "Rugby Union — gritty, disciplined, never say die 🏉", v:'ku' },
+      { t: "Basketball — fast, flashy, all about the highlight reel 🏀", v:'asu' },
+      { t: "Cricket — patient, strategic, built for the long game 🏏", v:'ku' },
+      { t: "Football — passionate, tribal, pure emotion ⚽", v:'asu' },
+    ]
+  },
+  {
+    q: "WHICH AMERICAN CITY WOULD YOU MOST FANCY VISITING?",
+    opts: [
+      { t: "Nashville — live music, BBQ, and proper Southern charm 🎸", v:'ku' },
+      { t: "Miami — sunshine, beaches, and year-round festival season 🌴", v:'asu' },
+      { t: "Chicago — brilliant architecture, deep-dish pizza, real culture 🏙️", v:'ku' },
+      { t: "Las Vegas — go big or go home, no regrets ✨", v:'asu' },
+    ]
+  },
+  {
+    q: "IT'S HALF-TIME AND YOUR TEAM IS DOWN BY 10 POINTS. WHAT DO YOU DO?",
+    opts: [
+      { t: "Stay calm — trust the team, there's plenty of time left 💙", v:'ku' },
+      { t: "Get even louder — the crowd has to drag them back into it 📣", v:'asu' },
+      { t: "Head to the queue — no point watching if it's not working 🍟", v:'ku' },
+      { t: "Start a chant — you're not leaving without a fight 🔥", v:'asu' },
+    ]
+  },
+  {
+    q: "WHAT'S YOUR IDEAL SATURDAY?",
+    opts: [
+      { t: "Long walk in the countryside, pub lunch, early night 🌿", v:'ku' },
+      { t: "Spontaneous road trip, no plan, see where it takes you 🚗", v:'asu' },
+      { t: "Match day at your local ground — singing in the rain 🎶", v:'ku' },
+      { t: "Festival, late night, absolutely worth the next-day suffering 🎪", v:'asu' },
+    ]
+  },
+  {
+    q: "WHICH BEST DESCRIBES YOUR APPROACH TO SUPPORTING A TEAM?",
+    opts: [
+      { t: "I'm loyal through the rough patches — anyone can support a winner 💪", v:'ku' },
+      { t: "I love a team with ambition and flair — winning matters 👑", v:'asu' },
+      { t: "The underdog story always gets me — back the plucky outsider 🏆", v:'ku' },
+      { t: "Swagger and confidence — I want my team to walk it 😎", v:'asu' },
+    ]
+  },
+  {
+    q: "YOU'VE GOT A SPARE AFTERNOON IN LONDON BEFORE THE GAME. WHERE ARE YOU?",
+    opts: [
+      { t: "Wandering around a museum — free and absolutely brilliant 🏛️", v:'ku' },
+      { t: "Oxford Street, Shoreditch or Carnaby — shopping and exploring 🛍️", v:'asu' },
+      { t: "A proper old pub in the City — soaking up the atmosphere 🍻", v:'ku' },
+      { t: "Rooftop bar, selfies, find the best view in town 🌇", v:'asu' },
+    ]
+  },
+  {
+    q: "WHAT'S YOUR RELATIONSHIP WITH AMERICAN FOOTBALL?",
+    opts: [
+      { t: "Watched a few games on telly — starting to get it and I'm hooked 🏈", v:'ku' },
+      { t: "Absolutely obsessed — been following college football for a while now 🔥", v:'asu' },
+      { t: "Complete newcomer — Wembley is my very first proper experience 🫡", v:'ku' },
+      { t: "Been to a college game in the States before — nothing quite like it 🏟️", v:'asu' },
+    ]
+  },
+  {
+    q: "WHICH COLOUR SCHEME SPEAKS TO YOU?",
+    opts: [
+      { t: "Royal Blue & Crimson — bold, proud, a proper kit 💙❤️", v:'ku' },
+      { t: "Maroon & Gold — fiery, striking, impossible to miss 🔴🟡", v:'asu' },
+      { t: "Classic navy — timeless and understated, like a good suit 🔵", v:'ku' },
+      { t: "Loud, vivid, anything that stands out in the stands 🌈", v:'asu' },
+    ]
+  },
+  {
+    q: "YOUR TEAM JUST SCORED A TOUCHDOWN IN THE FINAL MINUTE TO WIN. WHAT HAPPENS?",
+    opts: [
+      { t: "Dignified celebration — shake hands with the person next to you 🤝", v:'ku' },
+      { t: "Absolute chaos — hugging strangers, pure pandemonium 🥳", v:'asu' },
+      { t: "Arms raised, quiet disbelief — you knew they had it in them ✊", v:'ku' },
+      { t: "On your feet screaming from the moment the ball was snapped 📣", v:'asu' },
+    ]
+  },
+  {
+    q: "FINAL QUESTION — WHAT DO YOU WANT FROM YOUR TRIP TO WEMBLEY?",
+    opts: [
+      { t: "A proper experience — to really understand and love the sport 🏈", v:'ku' },
+      { t: "Memories and madness — a story to tell for years to come 🌟", v:'asu' },
+      { t: "Community — to feel part of something bigger than yourself 💙", v:'ku' },
+      { t: "Drama, spectacle, and the loudest atmosphere of my life 🏟️", v:'asu' },
+    ]
+  },
+];
+
+/* personality blurbs — indexed by [team][0-2 based on margin] */
+const personalities = {
+  ku: [
+    "You've got Jayhawk DNA. Gritty, loyal, and built for the big moments — Wembley is your stage.",
+    "Rock Chalk runs through you. You back your team through everything and you'll be the loudest one in the stadium.",
+    "The Jayhawks are your team and you knew it from the start. Lawrence, Kansas to Wembley, London — this is history and you've got the best seat in the house.",
+  ],
+  asu: [
+    "You're Sun Devil energy in human form. Loud, electric, and absolutely impossible to ignore.",
+    "The Sun Devils were made for fans like you — fearless, fired up, and ready to take over Wembley.",
+    "You live for moments like this. ASU is bringing the heat to London and you're leading the charge.",
+  ],
+};
+
+let cur = 0;
+let ans = new Array(Qs.length).fill(null);
+
+function startQuiz() {
+  cur = 0; ans = new Array(Qs.length).fill(null);
+  show('s-quiz'); hide('s-land');
+  renderQ(); window.scrollTo(0,0);
+}
+function retake() { hide('s-result'); startQuiz(); }
+
+function renderQ() {
+  const pct = Math.round((cur / Qs.length) * 100);
+  document.getElementById('q-prog').style.width = pct + '%';
+  document.getElementById('q-lbl').textContent = `Question ${cur+1} of ${Qs.length}`;
+  document.getElementById('btn-back').disabled = (cur === 0);
+
+  const blk = document.getElementById('q-block');
+  blk.style.animation = 'none'; blk.offsetHeight; blk.style.animation = '';
+
+  const saved = ans[cur];
+  const letters = ['A','B','C','D'];
+  const optsHTML = Qs[cur].opts.map((o,i) => {
+    let cls = 'q-opt';
+    if (saved !== null && saved.idx === i) cls += ' sel-' + saved.v;
+    return `<button class="${cls}" onclick="pick(${i},'${o.v}')">
+      <span class="opt-ltr">${letters[i]}</span><span>${o.t}</span>
+    </button>`;
+  }).join('');
+
+  blk.innerHTML = `<div class="q-num">QUESTION ${cur+1} / ${Qs.length}</div>
+    <div class="q-text">${Qs[cur].q}</div>
+    <div class="q-opts">${optsHTML}</div>`;
+
+  updateNext();
+}
+
+function pick(idx, v) {
+  ans[cur] = {idx, v};
+  document.querySelectorAll('.q-opt').forEach((el,i) => {
+    el.classList.remove('sel-ku','sel-asu');
+    if (i === idx) el.classList.add('sel-' + v);
+  });
+  updateNext();
+}
+
+function updateNext() {
+  const btn = document.getElementById('btn-next');
+  const has = ans[cur] !== null;
+  btn.classList.toggle('active', has);
+  btn.textContent = (cur === Qs.length - 1) ? 'SEE MY RESULT →' : 'NEXT →';
+}
+
+function nextQ() {
+  if (!ans[cur]) return;
+  if (cur === Qs.length - 1) { showResult(); return; }
+  cur++; renderQ(); window.scrollTo(0,0);
+}
+function prevQ() {
+  if (cur === 0) return;
+  cur--; renderQ(); window.scrollTo(0,0);
+}
+
+/* ── RESULT ── */
+function showResult() {
+  let ku=0, asu=0;
+  ans.forEach(a => { if(a) a.v==='ku'?ku++:asu++; });
+  const total = ku+asu;
+  const kpct = Math.round((ku/total)*100);
+  const apct = 100-kpct;
+  const winner = ku >= asu ? 'ku' : 'asu';
+
+  const screen = document.getElementById('s-result');
+  screen.className = 'res-'+winner;
+
+  // Pick personality tier (close / moderate / landslide)
+  const margin = Math.abs(ku-asu);
+  const tier = margin <= 2 ? 0 : margin <= 5 ? 1 : 2;
+  const personality = personalities[winner][tier];
+
+  const D = winner==='ku' ? {
+    emoji:'🦅',
+    hl:"YOU'RE A JAYHAWK!",
+    school:'KANSAS JAYHAWKS',
+    sc:'ku',
+    tag:"I'll be cheering on the Kansas Jayhawks at Wembley! Gritty, passionate, and built on real loyalty — the Jayhawks represent everything brilliant about college football. Lawrence, Kansas is a long way from London, but Rock Chalk is about to echo around Wembley and you'll be the one leading it.",
+    hashtag:'#RockChalk',    c1:'#0051a5', c2:'#002255', c3:'#001133', tc:'#FFD700',
+    pct:kpct,
+    tickA:'🦅 ROCK CHALK JAYHAWK! 🦅',
+    tickB:'💙 I\'M CHEERING THE JAYHAWKS 💙',
+  } : {
+    emoji:'😈',
+    hl:"YOU'RE A SUN DEVIL!",
+    school:'ASU SUN DEVILS',
+    sc:'asu',
+    tag:"I'll be cheering on the ASU Sun Devils at Wembley! Electric, fearless, and impossible to stop — the Sun Devils are the most exciting team in college football and they're bringing it all to London. Wembley has never seen anything like this. Fear the Fork!",
+    hashtag:'#ForkEm',    c1:'#8C1D40', c2:'#5a0028', c3:'#2a0010', tc:'#FFC627',
+    pct:apct,
+    tickA:'😈 FEAR THE FORK! 😈',
+    tickB:'🔴 I\'M CHEERING THE SUN DEVILS 🔴',
+  };
+
+  document.getElementById('res-emoji').textContent = D.emoji;
+  document.getElementById('res-hl').textContent = D.hl;
+  document.getElementById('res-school').textContent = D.school;
+  document.getElementById('res-school').className = 'res-school '+D.sc;
+  document.getElementById('res-tag').textContent = D.tag;
+  document.getElementById('res-personality').textContent = `${personality} ${D.hashtag}`;
+
+  setTimeout(() => {
+    document.getElementById('sc-ku').style.width  = kpct+'%';
+    document.getElementById('sc-asu').style.width  = apct+'%';
+    document.getElementById('sp-ku').textContent   = kpct+'%';
+    document.getElementById('sp-asu').textContent  = apct+'%';
+  }, 400);
+
+  const tms = [D.tickA,'🏈🇬🇧 UNION JACK CLASSIC • WEMBLEY 2026',D.tickB,'🏟️ WEMBLEY STADIUM, LONDON',D.tickA,'🏈🇬🇧 UNION JACK CLASSIC • WEMBLEY 2026',D.tickB,'🏟️ WEMBLEY STADIUM, LONDON'];
+  document.getElementById('res-ticker').innerHTML = tms.map(m=>`<span class="ticker-item">${m} <span class="ts">★</span></span>`).join('');
+
+  drawCard(D, personality, kpct, apct);
+
+  hide('s-quiz'); show('s-result'); window.scrollTo(0,0);
+}
+
+/* ══════════════════════════════════════
+   SQUARE CARD  1080 × 1080 px
+   Bold, centred, Instagram-ready layout
+══════════════════════════════════════ */
+function drawCard(D, personality, kpct, apct) {
+  const cv = document.getElementById('res-canvas');
+  cv.width  = 1080;
+  cv.height = 1080;
+  cv.style.width    = '100%';
+  cv.style.maxWidth = '540px';
+  cv.style.height   = 'auto';
+
+  const cx = cv.getContext('2d');
+  const S = 1080;
+
+  /* ══ 1. BACKGROUND ══ */
+  const bg = cx.createLinearGradient(0, 0, S, S);
+  bg.addColorStop(0,   D.c1);
+  bg.addColorStop(0.5, D.c2);
+  bg.addColorStop(1,   D.c3);
+  cx.fillStyle = bg;
+  cx.fillRect(0, 0, S, S);
+
+  /* Diagonal stripe texture */
+  cx.save();
+  cx.globalAlpha = 0.05;
+  cx.strokeStyle = '#ffffff';
+  cx.lineWidth = 40;
+  for (let x = -S; x < S * 2; x += 80) {
+    cx.beginPath(); cx.moveTo(x, 0); cx.lineTo(x + S, S); cx.stroke();
+  }
+  cx.restore();
+
+  /* Radial centre glow */
+  const glow = cx.createRadialGradient(S/2, S/2, 60, S/2, S/2, 520);
+  glow.addColorStop(0, D.tc + '20');
+  glow.addColorStop(1, 'transparent');
+  cx.fillStyle = glow; cx.fillRect(0, 0, S, S);
+
+  /* ══ 2. BORDER FRAME ══ */
+  cx.strokeStyle = D.tc;
+  cx.lineWidth = 14;
+  cx.strokeRect(20, 20, S - 40, S - 40);
+  cx.strokeStyle = 'rgba(255,255,255,0.18)';
+  cx.lineWidth = 3;
+  cx.strokeRect(34, 34, S - 68, S - 68);
+
+  /* ══ 3. TOP BANNER ══ */
+  cx.fillStyle = 'rgba(0,0,0,0.40)';
+  cx.fillRect(34, 34, S - 68, 78);
+  cx.textAlign = 'center';
+  cx.fillStyle = D.tc;
+  cx.font = 'bold 34px Impact, Arial Black, Arial';
+  cx.fillText('🏈  UNION JACK CLASSIC  🇬🇧', S / 2, 83);
+
+  /* ══ 4. HERO EMOJI + HALO ══
+     Emoji centre at y=310, baseline ~390 with 220px font */
+  const EMOJI_CY = 310;
+  const halo = cx.createRadialGradient(S/2, EMOJI_CY, 30, S/2, EMOJI_CY, 200);
+  halo.addColorStop(0, D.tc + '40');
+  halo.addColorStop(1, 'transparent');
+  cx.fillStyle = halo;
+  cx.beginPath(); cx.arc(S/2, EMOJI_CY, 200, 0, Math.PI * 2); cx.fill();
+
+  cx.font = '210px serif';
+  cx.textAlign = 'center';
+  cx.fillText(D.emoji, S / 2, EMOJI_CY + 100);
+
+  /* ══ 5. TEAM NAME (no "YOU'RE A") ══ */
+  const parts = D.school.split(' ');
+  cx.fillStyle = '#ffffff';
+  cx.font = 'bold 118px Impact, Arial Black, Arial';
+  cx.fillText(parts[0], S / 2, 548);          // KANSAS / ASU
+  cx.font = 'bold 84px Impact, Arial Black, Arial';
+  cx.fillText(parts.slice(1).join(' '), S / 2, 636);  // JAYHAWKS / SUN DEVILS
+
+  /* ══ 6. ACCENT DIVIDER ══ */
+  const divG = cx.createLinearGradient(140, 0, S - 140, 0);
+  divG.addColorStop(0,   'transparent');
+  divG.addColorStop(0.15, D.tc);
+  divG.addColorStop(0.85, D.tc);
+  divG.addColorStop(1,   'transparent');
+  cx.strokeStyle = divG;
+  cx.lineWidth = 4;
+  cx.beginPath(); cx.moveTo(140, 660); cx.lineTo(S - 140, 660); cx.stroke();
+
+  /* ══ 7. CHEER LINE (promoted — main statement) ══ */
+  cx.fillStyle = D.tc;
+  cx.font = 'bold 40px Arial';
+  cx.textAlign = 'center';
+  const cheerLine = D.sc === 'ku'
+    ? "I'll be cheering the Jayhawks at Wembley! 🦅"
+    : "I'll be cheering the Sun Devils at Wembley! 😈";
+  cx.fillText(cheerLine, S / 2, 714);
+
+  /* ══ 8. PERSONALITY BLURB ══ */
+  cx.fillStyle = 'rgba(255,255,255,0.82)';
+  cx.font = '30px Arial';
+  wrapTextCentre(cx, personality, S / 2, 766, S - 180, 44);
+
+  /* ══ 9. SCORE BADGES ══ */
+  const badgeY = 906;
+  const badgeW = 190, badgeH = 48, badgeR = 24;
+  const kuX  = S/2 - badgeW - 18;
+  const asuX = S/2 + 18;
+
+  cx.fillStyle = '#0051a5';
+  rr(cx, kuX, badgeY, badgeW, badgeH, badgeR);
+  cx.fillStyle = '#fff';
+  cx.font = 'bold 24px Arial';
+  cx.fillText('KU  ' + kpct + '%', kuX + badgeW/2, badgeY + 32);
+
+  cx.fillStyle = '#8C1D40';
+  rr(cx, asuX, badgeY, badgeW, badgeH, badgeR);
+  cx.fillStyle = '#fff';
+  cx.fillText('ASU  ' + apct + '%', asuX + badgeW/2, badgeY + 32);
+
+  /* ══ 10. HASHTAG ══ */
+  cx.fillStyle = D.tc;
+  cx.font = 'bold 48px Impact, Arial Black, Arial';
+  cx.textAlign = 'center';
+  cx.fillText(D.hashtag + '  •  #UnionJackClassic', S / 2, 998);
+
+  /* ══ 11. BOTTOM UNION JACK STRIPE BAR ══ */
+  const stripes = ['#CF142B','#ffffff','#00247D','#00247D','#ffffff','#CF142B'];
+  const sw = (S - 40) / stripes.length;
+  stripes.forEach((c, i) => {
+    cx.fillStyle = c;
+    cx.fillRect(20 + i * sw, S - 34, sw, 14);
+  });
+
+  /* Credit */
+  cx.fillStyle = 'rgba(255,255,255,0.22)';
+  cx.font = '18px Arial';
+  cx.fillText('canesacrossthepond.com', S / 2, S - 42);
+}
+
+/* ── Helper: word-wrap text centred on canvas ── */
+function wrapTextCentre(ctx, text, cx, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i] + ' ';
+    if (ctx.measureText(test).width > maxW && i > 0) {
+      ctx.fillText(line.trim(), cx, y);
+      line = words[i] + ' ';
+      y += lineH;
+    } else { line = test; }
+  }
+  ctx.fillText(line.trim(), cx, y);
+}
+
+/* ── Helper: word-wrap text on canvas ── */
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i] + ' ';
+    if (ctx.measureText(test).width > maxW && i > 0) {
+      ctx.fillText(line.trim(), x, y);
+      line = words[i] + ' ';
+      y += lineH;
+    } else {
+      line = test;
+    }
+  }
+  ctx.fillText(line.trim(), x, y);
+}
+
+/* ── Helper: rounded rectangle ── */
+function rr(cx, x, y, w, h, r) {
+  if (w <= 0) return;
+  cx.beginPath();
+  cx.moveTo(x+r,y); cx.lineTo(x+w-r,y);
+  cx.quadraticCurveTo(x+w,y,x+w,y+r); cx.lineTo(x+w,y+h-r);
+  cx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); cx.lineTo(x+r,y+h);
+  cx.quadraticCurveTo(x,y+h,x,y+h-r); cx.lineTo(x,y+r);
+  cx.quadraticCurveTo(x,y,x+r,y); cx.closePath(); cx.fill();
+}
+
+function dlCard() {
+  const cv = document.getElementById('res-canvas');
+  const a = document.createElement('a');
+  a.download = 'UJC-MyTeam.png';
+  a.href = cv.toDataURL('image/png');
+  a.click();
+}
+
+function show(id){ document.getElementById(id).style.display='block'; }
+function hide(id){ document.getElementById(id).style.display='none'; }
+</script>
+</body>
+</html>
